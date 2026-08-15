@@ -1,0 +1,34 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    image: vulnforge-api:latest
+    container_name: vulnforge-api
+    ports:
+      - "8000:8000"
+    environment:
+      VULNFORGE_CONFIG: /app/config.yaml
+    volumes:
+      - ./config.yaml:/app/config.yaml:ro
+      - vulnforge-results:/app/results
+      - vulnforge-cache:/app/.vf_cache
+    restart: unless-stopped
+
+  web:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.web
+    image: vulnforge-web:latest
+    container_name: vulnforge-web
+    ports:
+      - "3000:80"
+    environment:
+      VULNFORGE_API_HOST: api
+    depends_on:
+      - api
+    restart: unless-stopped
+
+volumes:
+  vulnforge-results:
+  vulnforge-cache:

@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: vulnforge
+  labels:
+    app.kubernetes.io/name: vulnforge
+    app.kubernetes.io/part-of: vulnforge

@@ -1,0 +1,128 @@
+# =============================================================================
+# vulnforge configuration (example)
+# Copy to `config.yaml` and adjust. When `config.yaml` is absent, vulnforge
+# falls back to this example and runs in fully-offline `mock` mode.
+# =============================================================================
+
+# --- General ----------------------------------------------------------------
+general:
+  # Offline-safe: mock provider needs no network / no API key.
+  mode: "mock"                 # mock | live
+  concurrency: 8               # parallel file scan workers
+  timeout_seconds: 120         # per-target scan timeout
+  output_dir: "./results"      # where reports are written
+  default_formats: ["json", "markdown", "html", "sarif"]
+  fail_on: "critical"          # none | low | medium | high | critical
+
+# --- Target discovery -------------------------------------------------------
+targets:
+  default_extensions:
+    - ".py"
+    - ".js"
+    - ".ts"
+    - ".tsx"
+    - ".jsx"
+    - ".go"
+    - ".rs"
+    - ".java"
+    - ".c"
+    - ".cpp"
+    - ".h"
+    - ".rb"
+    - ".php"
+    - ".sh"
+    - ".bash"
+    - ".yml"
+    - ".yaml"
+    - ".json"
+    - ".tf"
+    - ".toml"
+    - ".dockerfile"
+
+# --- Scanner switches -------------------------------------------------------
+scanners:
+  static: true                 # rule-based static analysis
+  llm: true                    # LLM-assisted vulnerability reasoning
+  fuzz: true                   # lightweight coverage-guided fuzzing (opt-in)
+  dependency: true             # SBOM + dependency CVE lookup
+  secrets: true                # hardcoded secrets / credentials detection
+
+# --- Static rule configuration ---------------------------------------------
+static:
+  min_severity: "low"          # low | medium | high | critical
+  max_line_length: 160
+  max_function_complexity: 20
+  banned_imports:
+    - "pickle"
+    - "subprocess"
+    - "eval"
+    - "exec"
+    - "yaml.load"
+
+# --- LLM providers (used by the LLM reasoning scanner) ----------------------
+llm:
+  default_provider: "mock"
+  max_tokens: 2048
+  temperature: 0.0
+  chunk_lines: 400             # split large files into chunks for the model
+  providers:
+    mock:
+      type: "mock"
+    openai_compat:
+      type: "openai_compat"
+      base_url: "https://api.openai.com/v1"
+      api_key: ""
+      model: "gpt-4.1"
+    glm:
+      type: "openai_compat"
+      base_url: "https://open.bigmodel.cn/api/paas/v4"
+      api_key: ""
+      model: "glm-5.3"
+    deepseek:
+      type: "openai_compat"
+      base_url: "https://api.deepseek.com/v1"
+      api_key: ""
+      model: "deepseek-v4-pro"
+    qwen:
+      type: "openai_compat"
+      base_url: "https://dashscope.aliyuncs.com/compatible-mode/v1"
+      api_key: ""
+      model: "qwen3.8-max"
+    anthropic:
+      type: "anthropic"
+      api_key: ""
+      model: "claude-fable-5"
+    gemini:
+      type: "gemini"
+      api_key: ""
+      model: "gemini-3.7-flash"
+    ollama:
+      type: "ollama"
+      base_url: "http://localhost:11434"
+      model: "llama3.1"
+
+# --- Fuzzing ----------------------------------------------------------------
+fuzz:
+  max_iterations: 5000
+  max_runtime_seconds: 30
+  corpus_dir: "./.corpus"
+  crash_dir: "./.crash"
+
+# --- Dependency / SBOM ------------------------------------------------------
+dependency:
+  ecosystem: "auto"            # pypi | npm | maven | cargo | go | auto
+  osv_endpoint: "https://api.osv.dev/v1/query"
+  offline: true                # true -> skip network, use local cache only
+
+# --- Webhook ----------------------------------------------------------------
+webhook:
+  enabled: false
+  secret: ""                   # HMAC secret for GitHub/GitLab webhooks
+  port: 8000
+
+# --- API server -------------------------------------------------------------
+api:
+  host: "127.0.0.1"
+  port: 8000
+  auth_token: ""               # bearer token; empty -> no auth
+  cors_origins: ["*"]

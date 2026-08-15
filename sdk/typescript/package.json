@@ -1,0 +1,34 @@
+{
+  "name": "vulnforge-sdk",
+  "version": "1.0.0",
+  "description": "vulnforge TypeScript SDK — 与 vulnforge API 控制面交互的轻量客户端（基于 fetch）",
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepare": "npm run build"
+  },
+  "keywords": [
+    "vulnforge",
+    "security",
+    "sdk",
+    "api-client",
+    "vulnerability"
+  ],
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "typescript": "^5.4.0"
+  }
+}

@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vulnforge-sdk"
+version = "1.0.0"
+description = "vulnforge Python SDK — 与 vulnforge API 控制面交互的轻量客户端（零依赖）"
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "Apache-2.0" }
+authors = [
+    { name = "huzjie", email = "huzjie@yonyou.com" },
+]
+keywords = ["vulnforge", "security", "sdk", "api-client", "vulnerability"]
+classifiers = [
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Topic :: Security",
+]
+
+[project.optional-dependencies]
+requests = ["requests>=2.25"]
+
+[tool.setuptools]
+packages = ["vulnforge_sdk"]

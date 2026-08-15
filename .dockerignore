@@ -1,0 +1,57 @@
+# --- VCS / meta ---
+.git
+.gitignore
+.github
+.gitattributes
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+env/
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.mypy_cache/
+.ruff_cache/
+
+# --- Node / frontend ---
+node_modules/
+web/node_modules/
+web/dist/
+web/.vite/
+*.tsbuildinfo
+
+# --- Runtime data ---
+vulnforge-runtime/
+results/
+reports/
+.corpus/
+.crash/
+.vf_cache/
+
+# --- Secrets / local config ---
+.env
+.env.*
+config.yaml
+*.pem
+*.key
+credentials.json
+secrets.yaml
+
+# --- IDE / OS ---
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
+
+# --- Misc ---
+*.log
+docs/

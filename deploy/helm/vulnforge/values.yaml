@@ -1,0 +1,188 @@
+# Default values for vulnforge.
+
+nameOverride: ""
+fullnameOverride: ""
+
+# Pull secrets for private registries (e.g. ghcr.io).
+imagePullSecrets: []
+
+# --- API (backend) ---------------------------------------------------------
+api:
+  image:
+    repository: ghcr.io/huzjie/vulnforge
+    tag: ""
+    pullPolicy: IfNotPresent
+  replicas: 1
+  service:
+    type: ClusterIP
+    port: 8000
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: "1"
+      memory: 1Gi
+  env: []
+  #  - name: EXTRA_VAR
+  #    value: "foo"
+
+# --- Web console -----------------------------------------------------------
+web:
+  enabled: true
+  image:
+    repository: ghcr.io/huzjie/vulnforge-web
+    tag: ""
+    pullPolicy: IfNotPresent
+  replicas: 1
+  service:
+    type: ClusterIP
+    port: 80
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 128Mi
+
+# --- Ingress ---------------------------------------------------------------
+ingress:
+  enabled: false
+  className: nginx
+  annotations: {}
+  hosts:
+    - host: vulnforge.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+  #  - secretName: vulnforge-tls
+  #    hosts:
+  #      - vulnforge.example.com
+
+# --- Service account -------------------------------------------------------
+serviceAccount:
+  create: true
+  name: ""
+
+# --- Configuration (rendered into the config ConfigMap) --------------------
+config:
+  general:
+    mode: "mock"
+    concurrency: 8
+    timeout_seconds: 120
+    output_dir: "./results"
+    default_formats: ["json", "markdown", "html", "sarif"]
+    fail_on: "critical"
+
+  targets:
+    default_extensions:
+      - ".py"
+      - ".js"
+      - ".ts"
+      - ".tsx"
+      - ".jsx"
+      - ".go"
+      - ".rs"
+      - ".java"
+      - ".c"
+      - ".cpp"
+      - ".h"
+      - ".rb"
+      - ".php"
+      - ".sh"
+      - ".bash"
+      - ".yml"
+      - ".yaml"
+      - ".json"
+      - ".tf"
+      - ".toml"
+      - ".dockerfile"
+
+  scanners:
+    static: true
+    llm: true
+    fuzz: true
+    dependency: true
+    secrets: true
+
+  static:
+    min_severity: "low"
+    max_line_length: 160
+    max_function_complexity: 20
+    banned_imports:
+      - "pickle"
+      - "subprocess"
+      - "eval"
+      - "exec"
+      - "yaml.load"
+
+  llm:
+    default_provider: "mock"
+    max_tokens: 2048
+    temperature: 0.0
+    chunk_lines: 400
+    providers:
+      mock:
+        type: "mock"
+      openai_compat:
+        type: "openai_compat"
+        base_url: "https://api.openai.com/v1"
+        api_key: ""
+        model: "gpt-4.1"
+      glm:
+        type: "openai_compat"
+        base_url: "https://open.bigmodel.cn/api/paas/v4"
+        api_key: ""
+        model: "glm-5.3"
+      deepseek:
+        type: "openai_compat"
+        base_url: "https://api.deepseek.com/v1"
+        api_key: ""
+        model: "deepseek-v4-pro"
+      qwen:
+        type: "openai_compat"
+        base_url: "https://dashscope.aliyuncs.com/compatible-mode/v1"
+        api_key: ""
+        model: "qwen3.8-max"
+      anthropic:
+        type: "anthropic"
+        api_key: ""
+        model: "claude-fable-5"
+      gemini:
+        type: "gemini"
+        api_key: ""
+        model: "gemini-3.7-flash"
+      ollama:
+        type: "ollama"
+        base_url: "http://localhost:11434"
+        model: "llama3.1"
+
+  fuzz:
+    max_iterations: 5000
+    max_runtime_seconds: 30
+    corpus_dir: "./.corpus"
+    crash_dir: "./.crash"
+
+  dependency:
+    ecosystem: "auto"
+    osv_endpoint: "https://api.osv.dev/v1/query"
+    offline: true
+
+  webhook:
+    enabled: false
+    secret: ""
+    port: 8000
+
+  api:
+    host: "0.0.0.0"
+    port: 8000
+    auth_token: ""
+    cors_origins: ["*"]
+
+# --- Pod security / node selection ----------------------------------------
+podAnnotations: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}

@@ -1,0 +1,65 @@
+# =============================================================================
+# vulnforge — 纯 mock（离线）配置示例
+# 复制为 config.yaml 即可使用；不依赖任何网络 / API Key。
+# =============================================================================
+
+general:
+  mode: "mock"                 # mock | live
+  concurrency: 4
+  timeout_seconds: 120
+  output_dir: "./results"
+  default_formats: ["json", "markdown"]
+  fail_on: "high"
+
+targets:
+  default_extensions:
+    - ".py" ".js" ".ts" ".tsx" ".jsx" ".go" ".java" ".c" ".cpp" ".h"
+
+scanners:
+  static: true
+  llm: true
+  fuzz: false                 # mock 模式下关闭 fuzz，避免副作用
+  dependency: true
+  secrets: true
+
+static:
+  min_severity: "low"
+  max_line_length: 160
+  max_function_complexity: 20
+  banned_imports:
+    - "pickle"
+    - "subprocess"
+    - "eval"
+    - "exec"
+    - "yaml.load"
+
+llm:
+  default_provider: "mock"
+  max_tokens: 2048
+  temperature: 0.0
+  chunk_lines: 400
+  providers:
+    mock:
+      type: "mock"
+
+fuzz:
+  max_iterations: 1000
+  max_runtime_seconds: 10
+  corpus_dir: "./.corpus"
+  crash_dir: "./.crash"
+
+dependency:
+  ecosystem: "auto"
+  osv_endpoint: "https://api.osv.dev/v1/query"
+  offline: true
+
+webhook:
+  enabled: false
+  secret: ""
+  port: 8000
+
+api:
+  host: "127.0.0.1"
+  port: 8000
+  auth_token: ""
+  cors_origins: ["*"]

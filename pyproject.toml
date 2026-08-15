@@ -1,0 +1,69 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vulnforge"
+version = "1.0.0"
+description = "vulnforge — AI-powered autonomous vulnerability research & security audit platform"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "Apache-2.0" }
+authors = [
+    { name = "huzjie", email = "huzjie@yonyou.com" },
+]
+keywords = [
+    "vulnerability", "security", "saas", "sast", "dast", "fuzzing",
+    "llm", "ai", "code-audit", "cve", "cvss", "sarif", "sbom",
+    "cybersecurity", "bug-hunting", "static-analysis", "scanner",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Security",
+    "Topic :: Software Development :: Quality Assurance",
+    "Topic :: Software Development :: Testing",
+]
+
+[project.optional-dependencies]
+full = [
+    "fastapi>=0.110",
+    "uvicorn[standard]>=0.29",
+    "httpx>=0.27",
+    "PyYAML>=6.0",
+]
+web = [
+    "fastapi>=0.110",
+    "uvicorn[standard]>=0.29",
+]
+test = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+]
+
+[project.scripts]
+vulnforge = "vulnforge.cli.main:main"
+
+[project.urls]
+Homepage = "https://github.com/huzjie/vulnforge"
+Documentation = "https://github.com/huzjie/vulnforge/tree/main/docs"
+Repository = "https://github.com/huzjie/vulnforge"
+Issues = "https://github.com/huzjie/vulnforge/issues"
+
+[tool.setuptools]
+packages = { find = { include = ["vulnforge*", "sdk*"] } }
+
+[tool.setuptools.package-data]
+vulnforge = ["*.yaml", "*.yml", "*.json", "templates/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-q"
